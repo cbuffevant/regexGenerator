@@ -1,0 +1,16 @@
+﻿{
+module Lexer
+open Microsoft.FSharp.Text.Lexing
+open Parser
+}
+
+rule buildGenerator = parse
+	| '.'		{ ANY_CHAR }
+	| '\\'		{ ESCAPE }
+	| '?'		{ ZERO_OR_ONE }
+	| _    		{ LITERAL (LexBuffer<_>.LexemeString lexbuf) }
+	| eof   	{ Parser.EOF }
+
+
+
+

@@ -1,0 +1,46 @@
+﻿%{
+#indent "off"
+
+open Generators
+open System.Diagnostics
+%}
+
+%start start
+%type < regExGenerator > start
+
+%token ANY_CHAR
+%token ESCAPE
+%token<string> LITERAL
+%token ZERO_OR_ONE
+%token EOF
+
+
+%%
+
+start : regEx EOF				{ fun () -> $1 ""  }
+
+regEx :
+	|
+		{ 
+			identityGen 
+		}
+
+	| ANY_CHAR quantifier regEx			
+		{ 
+			$2(charGen) >> $3
+		}
+
+	| LITERAL quantifier regEx
+		{
+			$2(literalGen $1) >> $3
+		}
+
+	| ESCAPE LITERAL quantifier regEx		
+		{ 
+			$3(literalGen $2) >> $4 
+		}
+
+quantifier :
+	|						{ Quantifiers.one }
+	| ZERO_OR_ONE			{ Quantifiers.zeroOrOne }
+	
