@@ -1,2 +1,4 @@
 RegExGenerator/bin/*
 RegExGenerator/obj/*
+packages/*
+.vs/*

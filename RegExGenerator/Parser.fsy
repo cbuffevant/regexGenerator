@@ -8,10 +8,13 @@ open System.Diagnostics
 %start start
 %type < regExGenerator > start
 
-%token ANY_CHAR
-%token ESCAPE
+%token ANY_CHAR 
+%token OPEN_PARENTHESIS CLOSE_PARENTHESIS
+%token OPEN_SET CLOSE_SET
 %token<string> LITERAL
-%token ZERO_OR_ONE
+%token<char*char> RANGE
+%token<string> ESCAPE
+%token ZERO_OR_ONE ZERO_OR_MORE ONE_OR_MORE
 %token EOF
 
 
@@ -25,9 +28,14 @@ regEx :
 			identityGen 
 		}
 
+	| OPEN_PARENTHESIS regEx CLOSE_PARENTHESIS quantifier regEx
+		{
+			($4 $2) >> $5
+		}
+
 	| ANY_CHAR quantifier regEx			
 		{ 
-			$2(charGen) >> $3
+			($2 charGen) >> $3
 		}
 
 	| LITERAL quantifier regEx
@@ -35,12 +43,18 @@ regEx :
 			$2(literalGen $1) >> $3
 		}
 
-	| ESCAPE LITERAL quantifier regEx		
+	| ESCAPE quantifier regEx		
 		{ 
-			$3(literalGen $2) >> $4 
+			$2(literalGen $1) >> $3
+		}
+	| OPEN_SET RANGE CLOSE_SET quantifier regEx
+		{
+			$4 ( rangeGen $2 ) >> $5
 		}
 
 quantifier :
 	|						{ Quantifiers.one }
 	| ZERO_OR_ONE			{ Quantifiers.zeroOrOne }
+	| ZERO_OR_MORE			{ Quantifiers.zeroOrMore }
+	| ONE_OR_MORE			{ Quantifiers.oneOrMore }
 	

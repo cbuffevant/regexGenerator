@@ -3,14 +3,28 @@ module Parser
 type token = 
   | EOF
   | ZERO_OR_ONE
+  | ZERO_OR_MORE
+  | ONE_OR_MORE
+  | ESCAPE of (string)
+  | RANGE of (char*char)
   | LITERAL of (string)
-  | ESCAPE
+  | OPEN_SET
+  | CLOSE_SET
+  | OPEN_PARENTHESIS
+  | CLOSE_PARENTHESIS
   | ANY_CHAR
 type tokenId = 
     | TOKEN_EOF
     | TOKEN_ZERO_OR_ONE
-    | TOKEN_LITERAL
+    | TOKEN_ZERO_OR_MORE
+    | TOKEN_ONE_OR_MORE
     | TOKEN_ESCAPE
+    | TOKEN_RANGE
+    | TOKEN_LITERAL
+    | TOKEN_OPEN_SET
+    | TOKEN_CLOSE_SET
+    | TOKEN_OPEN_PARENTHESIS
+    | TOKEN_CLOSE_PARENTHESIS
     | TOKEN_ANY_CHAR
     | TOKEN_end_of_input
     | TOKEN_error

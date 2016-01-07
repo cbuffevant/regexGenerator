@@ -37,3 +37,23 @@ type UnitTest() =
     [<TestMethod>]
     member x.TestZeroOrOneCharacter () = 
         "\\@.h?" |> x.TestGenerator
+
+    [<TestMethod>]
+    member x.TestParenthesis () = 
+        "(a.)?h" |> x.TestGenerator
+
+    [<TestMethod>]
+    member x.TestRange () = 
+        "[a-z]" |> x.TestGenerator
+
+    [<TestMethod>]
+    member x.TestRangeWithQuantifier () = 
+        "\\@[a-z]?\\." |> x.TestGenerator
+
+    [<TestMethod>]
+    member x.TestQuantifierOneOrMore () = 
+        "\\@[a-z]+\\." |> x.TestGenerator
+
+    [<TestMethod>]
+    member x.TestQuantifierZeroOrMore () = 
+        "\\@[a-z]*\\." |> x.TestGenerator
