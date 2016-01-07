@@ -6,13 +6,14 @@ type regExGenerator = unit -> string
 
 let max_random_occurences = 64
 
+let r = new Random()
+
 let randomBoolean =
-    let r = new Random()
     (r.Next(0, 1023) % 2) = 1
 
 let randomRange min max = 
-    let r = new Random()
-    r.Next(min, max)
+    let size = max - min
+    (r.Next() % size) + min
 
 // TODO: Only printable chars?
 // TODO: Support unicode
@@ -34,6 +35,11 @@ let rangeGen (c : char*char) s =
     n |> Convert.ToChar
         |> Seq.singleton
         |> Seq.append s
+        |> String.Concat
+
+let setGen (l : 'string list ) s = 
+    let n = randomRange 0 l.Length
+    [l.Item n; s] 
         |> String.Concat
 
 

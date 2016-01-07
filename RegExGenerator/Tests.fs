@@ -57,3 +57,11 @@ type UnitTest() =
     [<TestMethod>]
     member x.TestQuantifierZeroOrMore () = 
         "\\@[a-z]*\\." |> x.TestGenerator
+
+    [<TestMethod>]
+    member x.TestCharacterSet () = 
+        "[abc]" |> x.TestGenerator
+
+    [<TestMethod>]
+    member x.TestCharacterSetWithQuantifiers () = 
+        "[abc]+" |> x.TestGenerator

@@ -51,10 +51,19 @@ regEx :
 		{
 			$4 ( rangeGen $2 ) >> $5
 		}
+	| OPEN_SET char CLOSE_SET quantifier regEx
+		{
+			$4( setGen $2 ) >> $5
+		}
 
 quantifier :
 	|						{ Quantifiers.one }
 	| ZERO_OR_ONE			{ Quantifiers.zeroOrOne }
 	| ZERO_OR_MORE			{ Quantifiers.zeroOrMore }
 	| ONE_OR_MORE			{ Quantifiers.oneOrMore }
+
+char: 
+	|				{ [] }
+	| LITERAL char	{ $1 :: $2 }
+
 	
