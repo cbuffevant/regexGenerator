@@ -17,31 +17,34 @@ let randomRange min max =
 
 // TODO: Only printable chars?
 // TODO: Support unicode
-let identityGen s =
+let identity s =
     s
 
-let charGen s = 
+let char s = 
     let n = randomRange 1 255
     n |> Convert.ToChar
         |> Seq.singleton
         |> Seq.append s
         |> String.Concat
 
-let literalGen c s = 
+let literal c s = 
     [s; c] |> String.Concat  
 
-let rangeGen (c : char*char) s =
+let range (c : char*char) s =
     let n = randomRange ( Convert.ToInt32 (fst c)) (Convert.ToInt32 (snd c))
     n |> Convert.ToChar
         |> Seq.singleton
         |> Seq.append s
         |> String.Concat
 
-let setGen (l : 'string list ) s = 
+let set (l : 'string list ) s = 
     let n = randomRange 0 l.Length
     [l.Item n; s] 
         |> String.Concat
 
+let alternation (l : list<string -> string>) s =
+    let n = randomRange 0 l.Length
+    (l.Item n) s
 
 module Quantifiers =
     let rec loop g s n =

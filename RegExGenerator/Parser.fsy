@@ -13,6 +13,7 @@ open System.Diagnostics
 %token OPEN_SET CLOSE_SET
 %token<string> LITERAL
 %token<char*char> RANGE
+%token ALTERNATION
 %token<string> ESCAPE
 %token ZERO_OR_ONE ZERO_OR_MORE ONE_OR_MORE
 %token EOF
@@ -25,7 +26,7 @@ start : regEx EOF				{ fun () -> $1 ""  }
 regEx :
 	|
 		{ 
-			identityGen 
+			identity 
 		}
 
 	| OPEN_PARENTHESIS regEx CLOSE_PARENTHESIS quantifier regEx
@@ -33,27 +34,32 @@ regEx :
 			($4 $2) >> $5
 		}
 
+	| OPEN_PARENTHESIS alternation CLOSE_PARENTHESIS quantifier regEx
+		{
+			$4 (alternation $2) >> $5
+		}
+
 	| ANY_CHAR quantifier regEx			
 		{ 
-			($2 charGen) >> $3
+			($2 char) >> $3
 		}
 
 	| LITERAL quantifier regEx
 		{
-			$2(literalGen $1) >> $3
+			$2(literal $1) >> $3
 		}
 
 	| ESCAPE quantifier regEx		
 		{ 
-			$2(literalGen $1) >> $3
+			$2(literal $1) >> $3
 		}
 	| OPEN_SET RANGE CLOSE_SET quantifier regEx
 		{
-			$4 ( rangeGen $2 ) >> $5
+			$4 ( range $2 ) >> $5
 		}
 	| OPEN_SET char CLOSE_SET quantifier regEx
 		{
-			$4( setGen $2 ) >> $5
+			$4( set $2 ) >> $5
 		}
 
 quantifier :
@@ -65,5 +71,9 @@ quantifier :
 char: 
 	|				{ [] }
 	| LITERAL char	{ $1 :: $2 }
+
+alternation:
+	| regEx							{ [ $1 ] }
+	| regEx ALTERNATION alternation	{ $1 :: $3 }
 
 	

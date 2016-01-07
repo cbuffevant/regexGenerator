@@ -15,6 +15,7 @@ rule buildGenerator = parse
 	| ')'		{ CLOSE_PARENTHESIS }
 	| '['   	{ OPEN_SET }
 	| ']'		{ CLOSE_SET }
+	| '|'		{ ALTERNATION }
 	| _'-'_		{ RANGE (lexbuf.LexemeChar 0, lexbuf.LexemeChar 2)}
 	| _    		{ LITERAL (LexBuffer<_>.LexemeString lexbuf) }
 	| eof   	{ Parser.EOF }

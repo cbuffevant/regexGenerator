@@ -6,6 +6,7 @@ type token =
   | ZERO_OR_MORE
   | ONE_OR_MORE
   | ESCAPE of (string)
+  | ALTERNATION
   | RANGE of (char*char)
   | LITERAL of (string)
   | OPEN_SET
@@ -19,6 +20,7 @@ type tokenId =
     | TOKEN_ZERO_OR_MORE
     | TOKEN_ONE_OR_MORE
     | TOKEN_ESCAPE
+    | TOKEN_ALTERNATION
     | TOKEN_RANGE
     | TOKEN_LITERAL
     | TOKEN_OPEN_SET
@@ -34,6 +36,7 @@ type nonTerminalId =
     | NONTERM_regEx
     | NONTERM_quantifier
     | NONTERM_char
+    | NONTERM_alternation
 /// This function maps tokens to integer indexes
 val tagOfToken: token -> int
 

@@ -1,6 +1,7 @@
 ﻿module Tests
 
 open System
+open System.Text.RegularExpressions
 open Microsoft.VisualStudio.TestTools.UnitTesting
 open Microsoft.FSharp.Text.Lexing
 open RegExGenerator.Main
@@ -10,8 +11,7 @@ type UnitTest() =
 
     member x.Assert regEx testInput = 
         Diagnostics.Debug.WriteLine(regEx + " >> " + testInput)
-        let r = System.Text.RegularExpressions.Regex(regEx)
-        Assert.IsTrue(r.IsMatch(testInput))
+        Assert.IsTrue(Regex(regEx).IsMatch(testInput))
 
     member x.TestGenerator regEx = 
         regEx 
@@ -65,3 +65,15 @@ type UnitTest() =
     [<TestMethod>]
     member x.TestCharacterSetWithQuantifiers () = 
         "[abc]+" |> x.TestGenerator
+
+    [<TestMethod>]
+    member x.TestAlternate () = 
+        "(a|b)+" |> x.TestGenerator
+
+    [<TestMethod>]
+    member x.TestAlternateWithWords () = 
+        "(hi |bye )+" |> x.TestGenerator
+
+    [<TestMethod>]
+    member x.TestAlternateWithThreeWords () = 
+        "(hi | hello |bye )+" |> x.TestGenerator
